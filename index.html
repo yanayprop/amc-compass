@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AMC Compass — Structure your next AMC like a professional</title>
-  <meta name="description" content="Free framework for comparing AMC structuring costs across providers. Built by structuring professionals." />
+  <title>AMC Compass — Compare and simulate your AMC structure</title>
+  <meta name="description" content="Free framework for simulating AMC structuring costs across providers. Built by structuring professionals." />
   <style>
     :root {
       --bg: #faf9f5;
@@ -203,6 +203,90 @@
       align-items: center;
       gap: 10px;
       margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .slot-header input[type="text"] {
+      min-width: 0;
+    }
+
+    .slot-header select {
+      min-width: 0;
+    }
+
+    @media (max-width: 600px) {
+      .slot-header {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 8px;
+      }
+
+      .slot-header input[type="text"] {
+        grid-column: 2 / 4;
+      }
+
+      .slot-header select:first-of-type {
+        grid-column: 1 / 3;
+      }
+
+      .control-group {
+        flex-wrap: wrap;
+      }
+
+      .control-group label {
+        min-width: 80px;
+        font-size: 12px;
+      }
+
+      .control-group .value {
+        min-width: auto;
+        font-size: 13px;
+      }
+
+      .field-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .field-extras {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .toggle-row {
+        gap: 4px;
+      }
+
+      .toggle-row button {
+        font-size: 11px;
+        padding: 5px 8px;
+      }
+
+      .growth-panel .toggle-row button {
+        font-size: 11px;
+      }
+
+      .share-row {
+        flex-wrap: wrap;
+      }
+
+      .share-row input {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .tagline {
+        font-size: 13px;
+      }
+
+      .container {
+        padding: 0;
+      }
     }
 
     .color-dot {
@@ -219,7 +303,8 @@
     }
 
     .slot select {
-      min-width: 180px;
+      min-width: 0;
+      max-width: 100%;
     }
 
     .field-grid {
