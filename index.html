@@ -957,7 +957,10 @@
 
       if (state.axis === 'pct') {
         chart.options.scales.y.title.text = 'Annual cost (% of AUM)';
-        chart.options.scales.y.max = 10;
+        const allYVals = chart.data.datasets.flatMap(ds => ds.data.map(d => typeof d === 'object' ? d.y : d)).filter(v => typeof v === 'number' && isFinite(v));
+        const maxY = Math.max(...allYVals, 0.5);
+        const ceilY = Math.ceil(maxY * 1.2 * 2) / 2;
+        chart.options.scales.y.max = Math.max(ceilY, 1);
         chart.options.scales.y.ticks.callback = (v) => v + '%';
       } else {
         chart.options.scales.y.title.text = 'Annual cost (' + dc + ')';
