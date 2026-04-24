@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AMC Compass — Launch your next structured product using the AMC Compass</title>
-  <meta name="description" content="A Free framework for comparing AMC structuring costs across providers and juristictions. Built by structuring professionals." />
+  <title>AMC Compass — Structure your next AMC with a setup comparison tool</title>
+  <meta name="description" content="Free framework for comparing AMC structuring costs across providers and juristictions." />
   <style>
     :root {
       --bg: #faf9f5;
@@ -998,6 +998,8 @@
       }
     }
 
+    let userHasInteracted = false;
+
     function updateAll() {
       document.getElementById('aum-out').textContent = fmtMoney(state.aum, state.aumCurrency);
       document.getElementById('life-out').textContent = state.life + (state.life === 1 ? ' year' : ' years');
@@ -1022,41 +1024,50 @@
       renderLegend();
       renderCards();
       updateChart();
-      updateUrl();
+      if (userHasInteracted) updateUrl();
     }
 
-    document.getElementById('aum').addEventListener('input', (e) => { state.aum = +e.target.value; updateAll(); });
-    document.getElementById('life').addEventListener('input', (e) => { state.life = +e.target.value; updateAll(); });
-    document.getElementById('rate').addEventListener('input', (e) => { state.rate = +e.target.value; updateAll(); });
-    document.getElementById('target').addEventListener('input', (e) => { state.target = +e.target.value; updateAll(); });
+    function interact(fn) {
+      return function() {
+        userHasInteracted = true;
+        fn.apply(this, arguments);
+      };
+    }
 
-    document.getElementById('currency').addEventListener('change', (e) => {
+    document.getElementById('aum').addEventListener('input', interact((e) => { state.aum = +e.target.value; updateAll(); }));
+    document.getElementById('life').addEventListener('input', interact((e) => { state.life = +e.target.value; updateAll(); }));
+    document.getElementById('rate').addEventListener('input', interact((e) => { state.rate = +e.target.value; updateAll(); }));
+    document.getElementById('target').addEventListener('input', interact((e) => { state.target = +e.target.value; updateAll(); }));
+
+    document.getElementById('currency').addEventListener('change', interact((e) => {
       state.displayCurrency = e.target.value;
       state.aumCurrency = e.target.value;
       updateAll();
-    });
+    }));
 
-    document.getElementById('growth-check').addEventListener('change', (e) => {
+    document.getElementById('growth-check').addEventListener('change', interact((e) => {
       state.growthOn = e.target.checked;
       updateAll();
-    });
-    document.getElementById('growth-rate-btn').addEventListener('click', () => { state.growthMode = 'rate'; updateAll(); });
-    document.getElementById('growth-target-btn').addEventListener('click', () => { state.growthMode = 'target'; updateAll(); });
+    }));
+    document.getElementById('growth-rate-btn').addEventListener('click', interact(() => { state.growthMode = 'rate'; updateAll(); }));
+    document.getElementById('growth-target-btn').addEventListener('click', interact(() => { state.growthMode = 'target'; updateAll(); }));
 
     ['year1', 'ongoing', 'amort'].forEach(v => {
-      document.getElementById('view-' + v).addEventListener('click', () => { state.view = v; updateAll(); });
+      document.getElementById('view-' + v).addEventListener('click', interact(() => { state.view = v; updateAll(); }));
     });
     ['abs', 'pct'].forEach(a => {
-      document.getElementById('axis-' + a).addEventListener('click', () => { state.axis = a; updateAll(); });
+      document.getElementById('axis-' + a).addEventListener('click', interact(() => { state.axis = a; updateAll(); }));
     });
 
-    document.getElementById('add-slot').addEventListener('click', () => {
+    document.getElementById('add-slot').addEventListener('click', interact(() => {
       if (state.slots.length >= 8) return;
       state.slots.push(defaultSlot(state.slots.length));
       renderSlots(); updateAll();
-    });
+    }));
 
     document.getElementById('copy-url').addEventListener('click', () => {
+      userHasInteracted = true;
+      updateUrl();
       const input = document.getElementById('share-url');
       input.select();
       document.execCommand('copy');
@@ -1066,7 +1077,9 @@
       setTimeout(() => { btn.textContent = orig; }, 1500);
     });
 
-    if (!loadFromUrl()) {
+    if (loadFromUrl()) {
+      userHasInteracted = true;
+    } else {
       state.slots = [
         { id: 1, name: 'Provider A', currency: 'CHF', archetype: 'fixed_plus_pct', fields: { fixed: 10000, pct: 0.2 }, setup: 0, audit: 0 },
         { id: 2, name: 'Provider B', currency: 'CHF', archetype: 'pct_min', fields: { pct: 0.5, min: 10000 }, setup: 12500, audit: 0 },
@@ -1078,6 +1091,7 @@
     initChart();
     renderSlots();
     updateAll();
+    setTimeout(() => { userHasInteracted = true; }, 100);
   })();
   </script>
 </body>
