@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMC Compass — Structure your next AMC like a family office would</title>
+  <meta name="description" content="Free framework for comparing AMC structuring costs across providers. Built by structuring professionals." />
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --surface-2: #f1efe8;
+      --surface-3: #e8e6df;
+      --text: #1a1a19;
+      --text-secondary: #5f5e5a;
+      --text-tertiary: #888780;
+      --border: rgba(0, 0, 0, 0.12);
+      --border-hover: rgba(0, 0, 0, 0.24);
+      --info-bg: #e6f1fb;
+      --info-text: #0c447c;
+      --info-border: #85b7eb;
+      --danger: #a32d2d;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #262624;
+        --surface: #1f1e1d;
+        --surface-2: #2c2c2a;
+        --surface-3: #3a3a37;
+        --text: #f5f4ef;
+        --text-secondary: #b4b2a9;
+        --text-tertiary: #888780;
+        --border: rgba(255, 255, 255, 0.12);
+        --border-hover: rgba(255, 255, 255, 0.24);
+        --info-bg: #0c447c;
+        --info-text: #b5d4f4;
+        --info-border: #378add;
+        --danger: #f09595;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 2rem 1rem 4rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 500;
+      margin: 0 0 0.25rem;
+      letter-spacing: -0.01em;
+    }
+
+    .tagline {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0 0 2rem;
+    }
+
+    h2 {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin: 2rem 0 0.75rem;
+      letter-spacing: 0;
+    }
+
+    button, select, input[type="text"], input[type="number"] {
+      font-family: inherit;
+      font-size: 13px;
+      background: var(--surface);
+      color: var(--text);
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 10px;
+    }
+
+    button {
+      padding: 7px 14px;
+      cursor: pointer;
+      background: transparent;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    button:hover { border-color: var(--border-hover); background: var(--surface-2); }
+    button:active { transform: scale(0.98); }
+    button.active {
+      background: var(--info-bg);
+      color: var(--info-text);
+      border-color: var(--info-border);
+    }
+
+    input[type="text"]:focus, input[type="number"]:focus, select:focus {
+      outline: none;
+      border-color: var(--info-border);
+      box-shadow: 0 0 0 2px var(--info-bg);
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      outline: none;
+      width: 100%;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: var(--text);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: var(--text);
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1rem;
+    }
+    .control-group label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      min-width: 100px;
+    }
+    .control-group .value {
+      font-size: 14px;
+      font-weight: 500;
+      min-width: 110px;
+      text-align: right;
+    }
+
+    .growth-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--surface-2);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .growth-toggle:hover { background: var(--surface-3); }
+    .growth-toggle input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      margin: 0;
+    }
+    .growth-toggle label {
+      font-size: 13px;
+      color: var(--text);
+      cursor: pointer;
+      margin: 0;
+      flex: 1;
+    }
+    .growth-toggle .hint {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    .growth-panel {
+      padding: 12px 14px;
+      background: var(--surface-2);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .slot {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .slot-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .slot input[type="text"] {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .slot select {
+      min-width: 180px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field label {
+      font-size: 11px;
+      color: var(--text-tertiary);
+    }
+
+    .field input {
+      width: 100%;
+    }
+
+    .field-extras {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 0.5px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .remove-btn {
+      color: var(--text-tertiary);
+      border: none;
+      padding: 4px 8px;
+      font-size: 16px;
+      background: transparent;
+    }
+    .remove-btn:hover {
+      color: var(--danger);
+      background: transparent;
+    }
+
+    .add-slot {
+      width: 100%;
+      padding: 12px;
+      border: 0.5px dashed var(--border);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      background: transparent;
+      font-size: 13px;
+      margin-bottom: 1.5rem;
+    }
+    .add-slot:hover {
+      border-color: var(--text-secondary);
+      background: var(--surface-2);
+    }
+
+    .share-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 1rem;
+      padding: 12px;
+      background: var(--surface-2);
+      border-radius: 8px;
+    }
+
+    .share-row input {
+      flex: 1;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      background: transparent;
+      border: none;
+      padding: 4px;
+    }
+
+    .footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--border);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .footer a {
+      color: var(--info-text);
+      text-decoration: none;
+    }
+    .footer a:hover { text-decoration: underline; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .cost-card {
+      background: var(--surface-2);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .cost-card .name {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .cost-card .amount {
+      font-size: 17px;
+      font-weight: 500;
+    }
+    .cost-card .pct {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 2px;
+    }
+
+    .toggle-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .toggle-row button {
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AMC Compass</h1>
+    <p class="tagline">Structure your next AMC like a family office would. Enter your own quotes, compare structures, see where each wins.</p>
+
+    <h2>Scenario</h2>
+    <div class="control-group">
+      <label>Starting AUM</label>
+      <input type="range" id="aum" min="500000" max="50000000" step="100000" value="2000000" />
+      <span class="value" id="aum-out">$2,000,000</span>
+    </div>
+
+    <div class="control-group">
+      <label>Vehicle life</label>
+      <input type="range" id="life" min="1" max="10" step="1" value="5" />
+      <span class="value" id="life-out">5 years</span>
+    </div>
+
+    <div class="control-group">
+      <label>Display currency</label>
+      <select id="currency" style="flex: none; min-width: 100px;">
+        <option value="CHF">CHF</option>
+        <option value="USD" selected>USD</option>
+        <option value="EUR">EUR</option>
+      </select>
+      <span style="flex: 1;"></span>
+    </div>
+
+    <div class="growth-toggle" id="growth-toggle">
+      <input type="checkbox" id="growth-check" />
+      <label for="growth-check">Model AUM growth over vehicle life</label>
+      <span class="hint">optional</span>
+    </div>
+
+    <div class="growth-panel hidden" id="growth-panel">
+      <div class="toggle-row">
+        <button id="growth-rate-btn" class="active">Compound growth %</button>
+        <button id="growth-target-btn">Target AUM</button>
+      </div>
+
+      <div id="rate-row" class="control-group" style="margin-bottom: 0;">
+        <label>Annual growth</label>
+        <input type="range" id="rate" min="-10" max="50" step="1" value="15" />
+        <span class="value" id="rate-out">15%</span>
+      </div>
+
+      <div id="target-row" class="control-group hidden" style="margin-bottom: 0;">
+        <label>Target AUM</label>
+        <input type="range" id="target" min="500000" max="100000000" step="500000" value="5000000" />
+        <span class="value" id="target-out">$5,000,000</span>
+      </div>
+
+      <div id="growth-summary" style="font-size: 12px; color: var(--text-tertiary); margin-top: 8px;"></div>
+    </div>
+
+    <h2>Providers</h2>
+    <div id="slots"></div>
+    <button class="add-slot" id="add-slot">+ Add provider</button>
+
+    <h2 id="cards-heading">Annual cost at current AUM</h2>
+    <div class="toggle-row">
+      <button data-view="year1" id="view-year1">Year 1 all-in</button>
+      <button data-view="ongoing" id="view-ongoing">Ongoing only</button>
+      <button data-view="amort" id="view-amort">Amortized</button>
+    </div>
+    <div class="cards" id="cards"></div>
+
+    <h2 id="chart-heading">Cost curve across AUM</h2>
+    <div class="toggle-row">
+      <button data-axis="abs" id="axis-abs">Absolute cost</button>
+      <button data-axis="pct" id="axis-pct">% of AUM</button>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div style="position: relative; width: 100%; height: 360px; margin-bottom: 1rem;">
+      <canvas id="chart" role="img" aria-label="Cost comparison across providers.">Cost curves.</canvas>
+    </div>
+
+    <div class="share-row">
+      <span style="font-size: 12px; color: var(--text-secondary); flex-shrink: 0;">🔗 Share this comparison:</span>
+      <input type="text" id="share-url" readonly />
+      <button id="copy-url" style="flex-shrink: 0;">Copy</button>
+    </div>
+
+    <div class="footer">
+      <p><strong>How to use:</strong> Add a provider slot for each quote you've received. Pick the fee structure that matches their pricing model, fill in the numbers, and the tool calculates annual cost. Turn on "Model AUM growth" to see how costs play out over time instead of at a single AUM snapshot.</p>
+      <p><strong>Directional only.</strong> This tool models cost drag under stated fee structures. It does not account for FX hedging, transaction costs, tax treatment, jurisdictional risk, distribution fees, or anything else material to a structuring decision. Confirm all pricing directly with providers.</p>
+      <p><strong>Privacy:</strong> Your data never leaves your browser. Everything is encoded in the URL — share the link to share the comparison.</p>
+      <p style="margin-top: 2rem; font-size: 12px;">Built for asset managers and family offices evaluating AMC structures. Questions about structuring? <a href="mailto:hello@example.com">Get in touch</a>.</p>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script>
+  (function(){
+    const COLORS = ['#1D9E75', '#7F77DD', '#BA7517', '#E24B4A', '#378ADD', '#D4537E', '#97C459', '#EF9F27'];
+
+    const FX = {
+      CHF_USD: 1 / 0.78, CHF_EUR: 1 / 0.94,
+      USD_CHF: 0.78, EUR_CHF: 0.94,
+      USD_EUR: 0.78 / 0.94, EUR_USD: 0.94 / 0.78,
+      CHF_CHF: 1, USD_USD: 1, EUR_EUR: 1
+    };
+
+    function convert(amount, from, to) {
+      if (from === to) return amount;
+      return amount * (FX[from + '_' + to] || 1);
+    }
+
+    const ARCHETYPES = {
+      fixed: {
+        label: 'Fixed ongoing only',
+        fields: [{ key: 'fixed', label: 'Annual fee', type: 'currency', default: 15000 }]
+      },
+      pct: {
+        label: '% of AUM only',
+        fields: [{ key: 'pct', label: '% of AUM', type: 'pct', default: 0.5 }]
+      },
+      pct_min: {
+        label: '% of AUM with minimum',
+        fields: [
+          { key: 'pct', label: '% of AUM', type: 'pct', default: 0.5 },
+          { key: 'min', label: 'Minimum fee', type: 'currency', default: 10000 }
+        ]
+      },
+      fixed_plus_pct: {
+        label: 'Fixed fee + % of AUM',
+        fields: [
+          { key: 'fixed', label: 'Fixed fee', type: 'currency', default: 10000 },
+          { key: 'pct', label: '% of AUM', type: 'pct', default: 0.2 }
+        ]
+      },
+      tiered: {
+        label: 'Tiered % of AUM',
+        fields: [
+          { key: 'pct1', label: 'Rate below breakpoint', type: 'pct', default: 0.5 },
+          { key: 'breakpoint', label: 'Breakpoint AUM', type: 'currency', default: 5000000 },
+          { key: 'pct2', label: 'Rate above breakpoint', type: 'pct', default: 0.3 }
+        ]
+      },
+      master: {
+        label: 'Master issuer (multi-product)',
+        fields: [
+          { key: 'admin', label: 'Admin fee (shared)', type: 'currency', default: 25000 },
+          { key: 'agent_pct', label: 'Paying agent % of AUM', type: 'pct', default: 0.08 },
+          { key: 'agent_min', label: 'Paying agent minimum', type: 'currency', default: 10000 },
+          { key: 'products', label: 'Number of products', type: 'count', default: 3 },
+          { key: 'product_setup', label: 'Per-product setup', type: 'currency', default: 6000 },
+          { key: 'coupon_fee', label: 'Fee per coupon payment', type: 'currency', default: 500 },
+          { key: 'coupons_per_year', label: 'Coupons per product/yr', type: 'count', default: 4 },
+          { key: 'corp_action_fee', label: 'Fee per corporate action', type: 'currency', default: 1750 },
+          { key: 'corp_actions_per_year', label: 'Corporate actions per product/yr', type: 'count', default: 1 }
+        ]
+      }
+    };
+
+    function ongoingCost(slot, aumInSlotCurrency) {
+      const vals = slot.fields;
+      const aum = aumInSlotCurrency;
+      switch (slot.archetype) {
+        case 'fixed': return vals.fixed || 0;
+        case 'pct': return (vals.pct || 0) / 100 * aum;
+        case 'pct_min': return Math.max((vals.pct || 0) / 100 * aum, vals.min || 0);
+        case 'fixed_plus_pct': return (vals.fixed || 0) + (vals.pct || 0) / 100 * aum;
+        case 'tiered': {
+          const bp = vals.breakpoint || 0;
+          if (aum <= bp) return (vals.pct1 || 0) / 100 * aum;
+          return (vals.pct1 || 0) / 100 * bp + (vals.pct2 || 0) / 100 * (aum - bp);
+        }
+        case 'master': {
+          const products = vals.products || 1;
+          const admin = vals.admin || 0;
+          const payingAgent = Math.max((vals.agent_pct || 0) / 100 * aum, vals.agent_min || 0);
+          const coupons = (vals.coupon_fee || 0) * (vals.coupons_per_year || 0) * products;
+          const corpActions = (vals.corp_action_fee || 0) * (vals.corp_actions_per_year || 0) * products;
+          return admin + payingAgent + coupons + corpActions;
+        }
+        default: return 0;
+      }
+    }
+
+    function effectiveSetup(slot) {
+      const base = slot.setup || 0;
+      if (slot.archetype === 'master') {
+        const products = slot.fields.products || 1;
+        const perProduct = slot.fields.product_setup || 0;
+        return base + perProduct * products;
+      }
+      return base;
+    }
+
+    function totalCost(slot, aumInSlotCurr, view, life) {
+      const ongoing = ongoingCost(slot, aumInSlotCurr);
+      const setup = effectiveSetup(slot);
+      const audit = slot.audit || 0;
+      const annualBase = ongoing + audit;
+      if (view === 'year1') return annualBase + setup;
+      if (view === 'ongoing') return annualBase;
+      return annualBase + setup / life;
+    }
+
+    let state = {
+      aum: 2000000,
+      aumCurrency: 'USD',
+      life: 5,
+      displayCurrency: 'USD',
+      view: 'year1',
+      axis: 'pct',
+      growthOn: false,
+      growthMode: 'rate',
+      rate: 15,
+      target: 5000000,
+      slots: []
+    };
+
+    function defaultSlot(i) {
+      return {
+        id: Date.now() + Math.random(),
+        name: 'Provider ' + (i + 1),
+        currency: 'CHF',
+        archetype: 'fixed_plus_pct',
+        fields: {},
+        setup: 0,
+        audit: 0
+      };
+    }
+
+    function applyDefaults(slot) {
+      const defs = ARCHETYPES[slot.archetype].fields;
+      defs.forEach(f => {
+        if (slot.fields[f.key] === undefined) slot.fields[f.key] = f.default;
+      });
+      Object.keys(slot.fields).forEach(k => {
+        if (!defs.find(f => f.key === k)) delete slot.fields[k];
+      });
+    }
+
+    const fmtMoney = (amount, currency) => {
+      const sym = currency === 'USD' ? '$' : currency === 'EUR' ? '€' : 'CHF ';
+      return sym + Math.round(amount).toLocaleString('en-US');
+    };
+    const fmtPct = (n) => n.toFixed(2) + '%';
+
+    function aumTrajectory() {
+      const years = state.life;
+      const start = state.aum;
+      const traj = [];
+      if (!state.growthOn) {
+        for (let y = 0; y < years; y++) traj.push(start);
+        return traj;
+      }
+      if (state.growthMode === 'rate') {
+        const r = state.rate / 100;
+        for (let y = 0; y < years; y++) traj.push(start * Math.pow(1 + r, y));
+      } else {
+        const target = state.target;
+        if (years === 1) {
+          traj.push(start);
+        } else {
+          const r = Math.pow(target / start, 1 / (years - 1)) - 1;
+          for (let y = 0; y < years; y++) traj.push(start * Math.pow(1 + r, y));
+        }
+      }
+      return traj;
+    }
+
+    function cumulativeCost(slot, trajectoryInDisplay) {
+      let total = 0;
+      for (let i = 0; i < trajectoryInDisplay.length; i++) {
+        const aumInSlotCurr = convert(trajectoryInDisplay[i], state.displayCurrency, slot.currency);
+        const ongoing = ongoingCost(slot, aumInSlotCurr);
+        const audit = slot.audit || 0;
+        const setup = i === 0 ? effectiveSetup(slot) : 0;
+        total += convert(ongoing + audit + setup, slot.currency, state.displayCurrency);
+      }
+      return total;
+    }
+
+    function encodeState() {
+      const c = {
+        a: state.aum, ac: state.aumCurrency, l: state.life, dc: state.displayCurrency,
+        v: state.view, x: state.axis,
+        g: state.growthOn ? 1 : 0, gm: state.growthMode, r: state.rate, tg: state.target,
+        s: state.slots.map(s => ({
+          n: s.name, c: s.currency, t: s.archetype, f: s.fields, su: s.setup, au: s.audit
+        }))
+      };
+      return btoa(encodeURIComponent(JSON.stringify(c)));
+    }
+
+    function decodeState(str) {
+      try {
+        const c = JSON.parse(decodeURIComponent(atob(str)));
+        return {
+          aum: c.a, aumCurrency: c.ac, life: c.l, displayCurrency: c.dc,
+          view: c.v, axis: c.x,
+          growthOn: !!c.g, growthMode: c.gm || 'rate', rate: c.r ?? 15, target: c.tg ?? 5000000,
+          slots: c.s.map(s => ({
+            id: Date.now() + Math.random(),
+            name: s.n, currency: s.c, archetype: s.t, fields: s.f,
+            setup: s.su, audit: s.au
+          }))
+        };
+      } catch (e) { return null; }
+    }
+
+    function updateUrl() {
+      const url = new URL(window.location);
+      url.hash = encodeState();
+      window.history.replaceState(null, '', url);
+      document.getElementById('share-url').value = url.toString();
+    }
+
+    function loadFromUrl() {
+      const hash = window.location.hash.slice(1);
+      if (!hash) return false;
+      const loaded = decodeState(hash);
+      if (loaded && loaded.slots) {
+        state = loaded;
+        return true;
+      }
+      return false;
+    }
+
+    function renderSlots() {
+      const container = document.getElementById('slots');
+      container.innerHTML = '';
+      state.slots.forEach((slot, idx) => {
+        applyDefaults(slot);
+        const el = document.createElement('div');
+        el.className = 'slot';
+
+        const header = document.createElement('div');
+        header.className = 'slot-header';
+
+        const dot = document.createElement('div');
+        dot.className = 'color-dot';
+        dot.style.background = COLORS[idx % COLORS.length];
+        header.appendChild(dot);
+
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.value = slot.name;
+        nameInput.placeholder = 'Provider name';
+        nameInput.addEventListener('input', (e) => { slot.name = e.target.value; updateAll(); });
+        header.appendChild(nameInput);
+
+        const archSel = document.createElement('select');
+        Object.keys(ARCHETYPES).forEach(k => {
+          const opt = document.createElement('option');
+          opt.value = k; opt.textContent = ARCHETYPES[k].label;
+          if (k === slot.archetype) opt.selected = true;
+          archSel.appendChild(opt);
+        });
+        archSel.addEventListener('change', (e) => {
+          slot.archetype = e.target.value; slot.fields = {};
+          renderSlots(); updateAll();
+        });
+        header.appendChild(archSel);
+
+        const currSel = document.createElement('select');
+        ['CHF', 'USD', 'EUR'].forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c; opt.textContent = c;
+          if (c === slot.currency) opt.selected = true;
+          currSel.appendChild(opt);
+        });
+        currSel.style.minWidth = '60px';
+        currSel.addEventListener('change', (e) => { slot.currency = e.target.value; updateAll(); });
+        header.appendChild(currSel);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.textContent = '×';
+        removeBtn.addEventListener('click', () => {
+          state.slots.splice(idx, 1); renderSlots(); updateAll();
+        });
+        header.appendChild(removeBtn);
+        el.appendChild(header);
+
+        const fieldGrid = document.createElement('div');
+        fieldGrid.className = 'field-grid';
+        ARCHETYPES[slot.archetype].fields.forEach(f => {
+          const field = document.createElement('div');
+          field.className = 'field';
+          const lbl = document.createElement('label');
+          lbl.textContent = f.label + (f.type === 'pct' ? ' (%)' : '');
+          field.appendChild(lbl);
+          const inp = document.createElement('input');
+          inp.type = 'number';
+          if (f.type === 'pct') inp.step = '0.01';
+          else if (f.type === 'count') { inp.step = '1'; inp.min = '1'; }
+          else inp.step = '100';
+          inp.value = slot.fields[f.key];
+          inp.addEventListener('input', (e) => {
+            const parsed = f.type === 'count' ? parseInt(e.target.value, 10) : parseFloat(e.target.value);
+            slot.fields[f.key] = parsed || (f.type === 'count' ? 1 : 0);
+            updateAll();
+          });
+          field.appendChild(inp);
+          fieldGrid.appendChild(field);
+        });
+        el.appendChild(fieldGrid);
+
+        const extras = document.createElement('div');
+        extras.className = 'field-extras';
+
+        [['setup', slot.archetype === 'master' ? 'Master setup (one-time, shared)' : 'Setup fee (one-time)'], ['audit', 'Audit (annual, extra)']].forEach(([key, label]) => {
+          const f = document.createElement('div');
+          f.className = 'field';
+          const l = document.createElement('label');
+          l.textContent = label;
+          f.appendChild(l);
+          const i = document.createElement('input');
+          i.type = 'number'; i.step = '100'; i.value = slot[key];
+          i.addEventListener('input', (e) => { slot[key] = parseFloat(e.target.value) || 0; updateAll(); });
+          f.appendChild(i);
+          extras.appendChild(f);
+        });
+        el.appendChild(extras);
+        container.appendChild(el);
+      });
+    }
+
+    function renderLegend() {
+      const legend = document.getElementById('legend');
+      legend.innerHTML = '';
+      state.slots.forEach((slot, idx) => {
+        const item = document.createElement('span');
+        item.className = 'legend-item';
+        const dot = document.createElement('span');
+        dot.style.cssText = 'width: 10px; height: 10px; border-radius: 2px; background: ' + COLORS[idx % COLORS.length];
+        item.appendChild(dot);
+        item.appendChild(document.createTextNode(slot.name || 'Unnamed'));
+        legend.appendChild(item);
+      });
+    }
+
+    function renderCards() {
+      const container = document.getElementById('cards');
+      container.innerHTML = '';
+      const dc = state.displayCurrency;
+
+      if (state.growthOn) {
+        document.getElementById('cards-heading').textContent = 'Total cost over vehicle life';
+        const traj = aumTrajectory();
+        const avgAum = traj.reduce((a, b) => a + b, 0) / traj.length;
+        state.slots.forEach((slot, idx) => {
+          const total = cumulativeCost(slot, traj);
+          const avgPct = (total / state.life) / avgAum * 100;
+          const card = document.createElement('div');
+          card.className = 'cost-card';
+          card.style.borderLeft = '3px solid ' + COLORS[idx % COLORS.length];
+          card.innerHTML = `
+            <div class="name">${slot.name || 'Unnamed'}</div>
+            <div class="amount">${fmtMoney(total, dc)}</div>
+            <div class="pct">avg ${fmtPct(avgPct)} of AUM/yr</div>
+          `;
+          container.appendChild(card);
+        });
+      } else {
+        document.getElementById('cards-heading').textContent = 'Annual cost at current AUM';
+        state.slots.forEach((slot, idx) => {
+          const aumInSlotCurr = convert(state.aum, state.aumCurrency, slot.currency);
+          const cost = totalCost(slot, aumInSlotCurr, state.view, state.life);
+          const costInDisplay = convert(cost, slot.currency, dc);
+          const pct = costInDisplay / state.aum * 100;
+          const card = document.createElement('div');
+          card.className = 'cost-card';
+          card.style.borderLeft = '3px solid ' + COLORS[idx % COLORS.length];
+          card.innerHTML = `
+            <div class="name">${slot.name || 'Unnamed'}</div>
+            <div class="amount">${fmtMoney(costInDisplay, dc)} / yr</div>
+            <div class="pct">${fmtPct(pct)} of AUM</div>
+          `;
+          container.appendChild(card);
+        });
+      }
+    }
+
+    let chart;
+    function initChart() {
+      const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+      const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+      const tickColor = isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)';
+
+      chart = new Chart(document.getElementById('chart').getContext('2d'), {
+        type: 'line',
+        data: { labels: [], datasets: [] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: {} }
+          },
+          scales: {
+            x: { type: 'linear', grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 11 } }, title: { display: true, color: tickColor, font: { size: 11 } } },
+            y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 11 } }, title: { display: true, color: tickColor, font: { size: 11 } } }
+          }
+        }
+      });
+    }
+
+    function updateChart() {
+      const dc = state.displayCurrency;
+      const curSym = dc === 'USD' ? '$' : dc === 'EUR' ? '€' : 'CHF ';
+
+      if (state.growthOn) {
+        document.getElementById('chart-heading').textContent = 'Year-by-year annual cost';
+        const traj = aumTrajectory();
+        chart.data.labels = traj.map((_, i) => i + 1);
+        chart.data.datasets = state.slots.map((slot, idx) => {
+          const data = traj.map((aumDisp, yr) => {
+            const aumInSlotCurr = convert(aumDisp, dc, slot.currency);
+            const ongoing = ongoingCost(slot, aumInSlotCurr);
+            const audit = slot.audit || 0;
+            const setup = yr === 0 ? effectiveSetup(slot) : 0;
+            const yearCostSlot = ongoing + audit + setup;
+            const yearCostDisp = convert(yearCostSlot, slot.currency, dc);
+            if (state.axis === 'pct') return { x: yr + 1, y: yearCostDisp / aumDisp * 100 };
+            return { x: yr + 1, y: yearCostDisp };
+          });
+          return {
+            label: slot.name || 'Unnamed',
+            data: data,
+            borderColor: COLORS[idx % COLORS.length],
+            backgroundColor: COLORS[idx % COLORS.length],
+            borderWidth: 2, pointRadius: 3, tension: 0
+          };
+        });
+
+        chart.options.scales.x.type = 'linear';
+        chart.options.scales.x.min = 1;
+        chart.options.scales.x.max = state.life;
+        chart.options.scales.x.title.text = 'Year';
+        chart.options.scales.x.ticks.callback = (v) => 'Y' + v;
+        chart.options.scales.x.ticks.stepSize = 1;
+      } else {
+        document.getElementById('chart-heading').textContent = 'Cost curve across AUM';
+        const maxAum = Math.max(state.aum * 3, 20000000);
+        const steps = 40;
+        const pts = [];
+        for (let i = 0; i <= steps; i++) pts.push(500000 + (maxAum - 500000) * i / steps);
+
+        chart.data.labels = pts;
+        chart.data.datasets = state.slots.map((slot, idx) => {
+          const data = pts.map(aum => {
+            const aumInSlotCurr = convert(aum, dc, slot.currency);
+            const cost = totalCost(slot, aumInSlotCurr, state.view, state.life);
+            const costInDisplay = convert(cost, slot.currency, dc);
+            if (state.axis === 'pct') return { x: aum, y: costInDisplay / aum * 100 };
+            return { x: aum, y: costInDisplay };
+          });
+          return {
+            label: slot.name || 'Unnamed',
+            data: data,
+            borderColor: COLORS[idx % COLORS.length],
+            backgroundColor: COLORS[idx % COLORS.length],
+            borderWidth: 2, pointRadius: 0, tension: 0
+          };
+        });
+
+        const aumMarker = {
+          label: 'Current AUM',
+          data: state.slots.map((slot) => {
+            const aumInSlotCurr = convert(state.aum, dc, slot.currency);
+            const cost = totalCost(slot, aumInSlotCurr, state.view, state.life);
+            const costInDisplay = convert(cost, slot.currency, dc);
+            const y = state.axis === 'pct' ? costInDisplay / state.aum * 100 : costInDisplay;
+            return { x: state.aum, y };
+          }),
+          borderColor: 'rgba(128,128,128,0.6)',
+          backgroundColor: 'rgba(128,128,128,0.6)',
+          pointRadius: 5, showLine: false
+        };
+        chart.data.datasets.push(aumMarker);
+
+        chart.options.scales.x.type = 'linear';
+        chart.options.scales.x.min = 500000;
+        chart.options.scales.x.max = maxAum;
+        chart.options.scales.x.title.text = 'AUM (' + dc + ')';
+        chart.options.scales.x.ticks.callback = (v) => curSym + (v / 1000000).toFixed(1) + 'M';
+        chart.options.scales.x.ticks.stepSize = undefined;
+      }
+
+      if (state.axis === 'pct') {
+        chart.options.scales.y.title.text = 'Annual cost (% of AUM)';
+        chart.options.scales.y.max = 10;
+        chart.options.scales.y.ticks.callback = (v) => v + '%';
+      } else {
+        chart.options.scales.y.title.text = 'Annual cost (' + dc + ')';
+        chart.options.scales.y.max = undefined;
+        chart.options.scales.y.ticks.callback = (v) => curSym + (v / 1000).toFixed(0) + 'K';
+      }
+
+      chart.options.plugins.tooltip.callbacks = {
+        title: (items) => {
+          if (state.growthOn) return 'Year ' + items[0].parsed.x;
+          return 'AUM: ' + fmtMoney(items[0].parsed.x, dc);
+        },
+        label: (item) => {
+          const v = item.parsed.y;
+          if (state.axis === 'pct') return item.dataset.label + ': ' + v.toFixed(2) + '% of AUM';
+          return item.dataset.label + ': ' + fmtMoney(v, dc);
+        }
+      };
+
+      chart.update('none');
+    }
+
+    function updateGrowthSummary() {
+      const el = document.getElementById('growth-summary');
+      if (!state.growthOn) { el.textContent = ''; return; }
+      const start = state.aum;
+      if (state.growthMode === 'rate') {
+        const finalAum = start * Math.pow(1 + state.rate / 100, state.life - 1);
+        el.textContent = `Starts at ${fmtMoney(start, state.displayCurrency)}, ends at ${fmtMoney(finalAum, state.displayCurrency)} in year ${state.life}`;
+      } else {
+        if (state.life > 1 && state.target > 0 && start > 0) {
+          const impliedCagr = (Math.pow(state.target / start, 1 / (state.life - 1)) - 1) * 100;
+          el.textContent = `Implied CAGR: ${impliedCagr.toFixed(1)}% over ${state.life} years`;
+        } else el.textContent = '';
+      }
+    }
+
+    function updateAll() {
+      document.getElementById('aum-out').textContent = fmtMoney(state.aum, state.aumCurrency);
+      document.getElementById('life-out').textContent = state.life + (state.life === 1 ? ' year' : ' years');
+      document.getElementById('rate-out').textContent = state.rate + '%';
+      document.getElementById('target-out').textContent = fmtMoney(state.target, state.displayCurrency);
+
+      document.getElementById('growth-check').checked = state.growthOn;
+      document.getElementById('growth-panel').classList.toggle('hidden', !state.growthOn);
+      document.getElementById('growth-rate-btn').classList.toggle('active', state.growthMode === 'rate');
+      document.getElementById('growth-target-btn').classList.toggle('active', state.growthMode === 'target');
+      document.getElementById('rate-row').classList.toggle('hidden', state.growthMode !== 'rate');
+      document.getElementById('target-row').classList.toggle('hidden', state.growthMode !== 'target');
+
+      ['year1', 'ongoing', 'amort'].forEach(v => {
+        document.getElementById('view-' + v).classList.toggle('active', v === state.view);
+      });
+      ['abs', 'pct'].forEach(a => {
+        document.getElementById('axis-' + a).classList.toggle('active', a === state.axis);
+      });
+
+      updateGrowthSummary();
+      renderLegend();
+      renderCards();
+      updateChart();
+      updateUrl();
+    }
+
+    document.getElementById('aum').addEventListener('input', (e) => { state.aum = +e.target.value; updateAll(); });
+    document.getElementById('life').addEventListener('input', (e) => { state.life = +e.target.value; updateAll(); });
+    document.getElementById('rate').addEventListener('input', (e) => { state.rate = +e.target.value; updateAll(); });
+    document.getElementById('target').addEventListener('input', (e) => { state.target = +e.target.value; updateAll(); });
+
+    document.getElementById('currency').addEventListener('change', (e) => {
+      state.displayCurrency = e.target.value;
+      state.aumCurrency = e.target.value;
+      updateAll();
+    });
+
+    document.getElementById('growth-check').addEventListener('change', (e) => {
+      state.growthOn = e.target.checked;
+      updateAll();
+    });
+    document.getElementById('growth-rate-btn').addEventListener('click', () => { state.growthMode = 'rate'; updateAll(); });
+    document.getElementById('growth-target-btn').addEventListener('click', () => { state.growthMode = 'target'; updateAll(); });
+
+    ['year1', 'ongoing', 'amort'].forEach(v => {
+      document.getElementById('view-' + v).addEventListener('click', () => { state.view = v; updateAll(); });
+    });
+    ['abs', 'pct'].forEach(a => {
+      document.getElementById('axis-' + a).addEventListener('click', () => { state.axis = a; updateAll(); });
+    });
+
+    document.getElementById('add-slot').addEventListener('click', () => {
+      if (state.slots.length >= 8) return;
+      state.slots.push(defaultSlot(state.slots.length));
+      renderSlots(); updateAll();
+    });
+
+    document.getElementById('copy-url').addEventListener('click', () => {
+      const input = document.getElementById('share-url');
+      input.select();
+      document.execCommand('copy');
+      const btn = document.getElementById('copy-url');
+      const orig = btn.textContent;
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => { btn.textContent = orig; }, 1500);
+    });
+
+    if (!loadFromUrl()) {
+      state.slots = [
+        { id: 1, name: 'Provider A', currency: 'CHF', archetype: 'fixed_plus_pct', fields: { fixed: 10000, pct: 0.2 }, setup: 0, audit: 0 },
+        { id: 2, name: 'Provider B', currency: 'CHF', archetype: 'pct_min', fields: { pct: 0.5, min: 10000 }, setup: 12500, audit: 0 },
+        { id: 3, name: 'Provider C', currency: 'CHF', archetype: 'pct_min', fields: { pct: 0.18, min: 20000 }, setup: 15000, audit: 4000 }
+      ];
+    }
+
+    document.getElementById('currency').value = state.displayCurrency;
+    initChart();
+    renderSlots();
+    updateAll();
+  })();
+  </script>
+</body>
+</html>
